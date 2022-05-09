@@ -1,8 +1,9 @@
 import * as express from 'express';
 
 import { HttpError } from '../utils';
+import { P_VALUE } from './../config';
 import { VERIFF_API } from '../interfaces/veriff';
-import { ContextMedia, SessionMedia, MediaContext, MediaContextMap } from '../types';
+import { ContextMedia, SessionMedia, MediaContext, MediaContextMap, CONTEXT } from '../types';
 
 export const SessionMediaContext = {
     sessionMediaContext: async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -14,17 +15,23 @@ export const SessionMediaContext = {
             const media: ContextMedia = {'document-front': [], 'document-back': []};
             const mediaForMap: MediaContextMap = {};
 
-            mediaContextResponse.data.forEach(mediaDetail => mediaForMap[mediaDetail.mediaId] = mediaDetail);
-            mediaDetails.data.forEach(mediaDetail => {
-                const detail: MediaContext = mediaForMap[mediaDetail.id];
-                if (detail.context === 'back') {
-                    media['document-back'].push(mediaDetail);
-                }
-                if (detail.context === 'front') {
-                    media['document-front'].push(mediaDetail);
+            // Group media by the context type
+            mediaContextResponse.data.forEach(mediaDetail => {
+                // Filtering out irrelevant media
+                if (mediaDetail.context in CONTEXT) {
+                    mediaDetail.context = CONTEXT[mediaDetail.context];
+                    mediaForMap[mediaDetail.mediaId] = mediaDetail;
                 }
             });
 
+            mediaDetails.data.forEach(mediaDetail => {
+                const detail: MediaContext = mediaForMap[mediaDetail.id];
+                if (!detail) return;
+                const context = detail.probability > P_VALUE ? detail?.context : mediaDetail.context;
+                media[context].push(mediaDetail);
+            });
+
+            // Sorted media list by probability descending
             media['document-front'].sort((media_1, media_2) =>
                 mediaForMap[media_2.id].probability - mediaForMap[media_1.id].probability);
 

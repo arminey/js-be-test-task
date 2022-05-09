@@ -6,4 +6,6 @@ export const ENV = {
     PORT: process.env.PORT,
     VERIFF_URL: process.env.VERIFF_URL,
     SESSION_UUID: process.env.SESSION_UUID
-}
+};
+
+export const P_VALUE = 0.7;

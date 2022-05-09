@@ -14,11 +14,6 @@ const expectedResult = {
           "id": "7f2dcbd8-5b5f-4f1a-bfa4-016ddf4dd662",
           "mimeType": "image/png",
           "context": "document-front"
-      },
-      {
-          "id": "40f1e462-6db8-4313-ace3-83e4f5619c56",
-          "mimeType": "image/png",
-          "context": "document-back"
       }
     ],
     "document-back": [
@@ -26,7 +21,12 @@ const expectedResult = {
           "id": "a6c90b4f-ddfc-49eb-89ad-05b7f1274f96",
           "mimeType": "image/png",
           "context": "document-front"
-      }
+      },
+      {
+          "id": "40f1e462-6db8-4313-ace3-83e4f5619c56",
+          "mimeType": "image/png",
+          "context": "document-back"
+      }      
     ]
   }
 };

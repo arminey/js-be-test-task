@@ -24,3 +24,8 @@ export interface MediaContext {
 export interface MediaContextMap {
     [key: string]: MediaContext
 };
+
+export enum CONTEXT {
+    back = 'document-back',
+    front = 'document-front'
+}
